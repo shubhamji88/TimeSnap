@@ -6,8 +6,10 @@
     android:orientation="vertical" >
 
     <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/HostFragment"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:name="com.shubhamji88.timesnap.ui.MapViewFragment"
-        android:layout_height="match_parent" />
+         />
 
 </LinearLayout>
