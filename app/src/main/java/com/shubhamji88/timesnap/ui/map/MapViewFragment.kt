@@ -1,4 +1,4 @@
-package com.shubhamji88.timesnap.ui
+package com.shubhamji88.timesnap.ui.map
 
 import android.app.Application
 import android.content.Context
@@ -62,7 +62,7 @@ class MapViewFragment : Fragment() {
     private fun putPlaceMarks(){
         val layer = RenderableLayer("Placemarks")
         wwd.layers.addLayer(layer)
-        wwd.worldWindowController=PickNavigateController(application)
+        wwd.worldWindowController= PickNavigateController(application)
         layer.addRenderable(
             createAirportPlacemark(
                 Position.fromDegrees(34.2000, -119.2070, 0.0),

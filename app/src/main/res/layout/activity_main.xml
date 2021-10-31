@@ -9,7 +9,7 @@
         android:id="@+id/HostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:name="com.shubhamji88.timesnap.ui.MapViewFragment"
+        android:name="com.shubhamji88.timesnap.ui.map.MapViewFragment"
          />
 
 </LinearLayout>

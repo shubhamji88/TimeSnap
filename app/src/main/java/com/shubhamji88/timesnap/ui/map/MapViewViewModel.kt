@@ -1,4 +1,4 @@
-package com.shubhamji88.timesnap.ui
+package com.shubhamji88.timesnap.ui.map
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -19,5 +19,5 @@ import gov.nasa.worldwind.render.ImageSource
 import gov.nasa.worldwind.shape.Placemark
 
 class MapViewViewModel(application: Application) : AndroidViewModel(application)  {
-
+    
 }

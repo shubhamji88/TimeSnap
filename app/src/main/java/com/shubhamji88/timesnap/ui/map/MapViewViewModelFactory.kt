@@ -1,4 +1,4 @@
-package com.shubhamji88.timesnap.ui
+package com.shubhamji88.timesnap.ui.map
 
 import android.app.Application
 import androidx.lifecycle.ViewModel
