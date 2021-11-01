@@ -14,12 +14,8 @@ import kotlinx.coroutines.withContext
 
 class AppRepository(val dao: CacheDAO) {
     val allItems by lazy { dao.getAllItem() }
-    suspend fun getItemDetails(name:String): Item? {
-        allItems.value?.forEach {
-            if(name.toString().lowercase()==it.name!!.lowercase())
-                return it
-        }
-        return null
+    suspend fun getItemDetails(name:String): Item {
+        return dao.getItemByName(name)
     }
     suspend fun cacheAllItems(){
         withContext(Dispatchers.IO){

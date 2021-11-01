@@ -10,8 +10,8 @@ interface CacheDAO {
     fun insert(token: List<Item>)
     @Query("select * from Item")
     fun getAllItem(): LiveData<List<Item>>
-//    @Query("select name from Item where ")
-//    fun getItemByName(name:String): LiveData<String?>
+    @Query("select * from Item where name==:name")
+    fun getItemByName(name:String): Item
     @Query("delete from Item")
     fun clear()
 }

@@ -1,37 +1,37 @@
 package com.shubhamji88.timesnap.ui.dialog
 
 import android.app.Dialog
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.MutableLiveData
+import com.google.gson.Gson
 import com.shubhamji88.timesnap.R
 import com.shubhamji88.timesnap.Utils
-import com.shubhamji88.timesnap.data.getDatabase
 import com.shubhamji88.timesnap.data.model.Item
 //import com.shubhamji88.timesnap.data.Animal
 import com.shubhamji88.timesnap.databinding.AboutDialogBinding
-import com.shubhamji88.timesnap.repo.AppRepository
 import kotlinx.coroutines.*
 
 class AboutDialog : DialogFragment() {
     private lateinit var mListener: OnClickListener
     private lateinit var binding:AboutDialogBinding
-    private var itemName:String?=null
     val job=Job()
     private lateinit var dialogScope: CoroutineScope
-    private val currentItemDetails=MutableLiveData<Item?>()
+    private lateinit var currentItemDetails:Item
     private val currentItemBitmap=MutableLiveData<Bitmap?>()
-    val repo=AppRepository(getDatabase(requireContext()).cacheDao)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val arguments = arguments
         if (arguments != null) {
-            itemName = arguments.getString(KEY_DEFAULT_NAME)
+            Log.i("Passsssss",arguments.getString(KEY_DEFAULT_DATA)+"d")
+            currentItemDetails=Gson().fromJson(arguments.getString(KEY_DEFAULT_DATA),Item::class.java)
         }
     }
 
@@ -64,32 +64,21 @@ class AboutDialog : DialogFragment() {
     ): View {
         binding= DataBindingUtil.inflate(inflater,R.layout.about_dialog,container,false)
         dialogScope= CoroutineScope(Dispatchers.Main+job)
-        getItemDetails()
-        currentItemDetails.observe(viewLifecycleOwner,{
-            it?.let {
-                binding.name.text=it.name
-                binding.details.text=it.text
-                dialogScope.launch(Dispatchers.IO) {
-                    currentItemBitmap.postValue(it.picUrl?.let { it1 ->
-                        Utils.bindImage(requireContext(),
-                            it1
-                        )
-                    })
-                }
-            }
-        })
+        binding.name.text=currentItemDetails.name
+        binding.details.text=currentItemDetails.text
+        dialogScope.launch(Dispatchers.IO) {
+            currentItemBitmap.postValue(currentItemDetails.picUrl?.let { it1 ->
+                Utils.bindImage(
+                    requireContext(),
+                    it1
+                )
+            })
+        }
         currentItemBitmap.observe(viewLifecycleOwner,{
             binding.imageView.setImageBitmap(it)
         })
 
         return binding.root
-    }
-    private fun getItemDetails(){
-        dialogScope.launch(Dispatchers.IO) {
-           itemName?.let {
-               currentItemDetails.postValue(repo.getItemDetails(it))
-           }
-        }
     }
 
     override fun onStop() {
@@ -110,11 +99,12 @@ class AboutDialog : DialogFragment() {
     }
 
     companion object {
-        private const val KEY_DEFAULT_NAME = "default_name"
-        fun getInstance(name: String, listener: OnClickListener): AboutDialog {
+        private const val KEY_DEFAULT_DATA = "default_data"
+        fun getInstance(listener: OnClickListener, itemData:Item): AboutDialog {
             val dialog = AboutDialog()
             val bundle = Bundle()
-            bundle.putString(KEY_DEFAULT_NAME,name)
+
+            bundle.putString(Gson().toJson(itemData), KEY_DEFAULT_DATA)
             dialog.arguments = bundle
             dialog.mListener = listener
             return dialog

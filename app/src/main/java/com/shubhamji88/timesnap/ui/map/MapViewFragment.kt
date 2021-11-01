@@ -2,6 +2,7 @@ package com.shubhamji88.timesnap.ui.map
 
 import android.app.Application
 import android.content.Context
+import android.content.Intent
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.util.Log
@@ -13,6 +14,7 @@ import com.example.worldwindtest.CameraController
 import com.shubhamji88.timesnap.R
 import com.shubhamji88.timesnap.atmosphere.AtmosphereLayer
 import com.shubhamji88.timesnap.databinding.MapViewFragmentBinding
+import com.shubhamji88.timesnap.ui.about.PopUpActivity
 import com.shubhamji88.timesnap.ui.dialog.AboutDialog
 import com.shubhamji88.timesnap.ui.dialog.YearPicker
 import gov.nasa.worldwind.BasicWorldWindowController
@@ -25,7 +27,7 @@ import gov.nasa.worldwind.layer.BlueMarbleLandsatLayer
 import gov.nasa.worldwind.layer.RenderableLayer
 import gov.nasa.worldwind.shape.Placemark
 
-class MapViewFragment : Fragment() , YearPicker.OnClickListener,AboutDialog.OnClickListener,PickNavigateController.OnClickListener{
+class MapViewFragment : Fragment() , YearPicker.OnClickListener,PickNavigateController.OnClickListener{
     private lateinit var wwd: WorldWindow
     private var atmosphereLayer: AtmosphereLayer? = null
     private var sunLocation = Location(0.0, -100.0)
@@ -121,17 +123,12 @@ class MapViewFragment : Fragment() , YearPicker.OnClickListener,AboutDialog.OnCl
         Toast.makeText(context, "${array[yearIndex!!]}", Toast.LENGTH_SHORT).show()
     }
 
-    override fun onShareSticker() {
-        TODO("Not yet implemented")
-    }
-
-    override fun onAR() {
-        TODO("Not yet implemented")
-    }
-
     override fun openItemDetails(name: String) {
-        val aboutDialog=AboutDialog.getInstance(name,this)
-        aboutDialog.show(activity?.supportFragmentManager!!,"About")
+        val aboutActivityIntent = Intent(context, PopUpActivity::class.java)
+            .putExtra("name", name)
+        startActivity(aboutActivityIntent)
+//        val aboutDialog=AboutDialog.getInstance(this,viewModel.getItemByName(name))
+//        aboutDialog.show(activity?.supportFragmentManager!!,"About")
     }
 }
 class PickNavigateController(context: Context,listner:PickNavigateController.OnClickListener) :

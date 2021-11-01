@@ -30,6 +30,7 @@ class MapViewViewModel(application: Application) : AndroidViewModel(application)
             repo.cacheAllItems()
         }
     }
+
     fun getAllPlacemark(data: List<Item>){
         uiScope.launch(Dispatchers.IO){
             val placemarkList= mutableMapOf<String,MutableList<Placemark>>()

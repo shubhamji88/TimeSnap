@@ -10,6 +10,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TimeSnap">
+        <activity android:name="com.shubhamji88.timesnap.ui.about.PopUpActivity"
+            android:theme="@style/CustomTheme"/>
         <activity
             android:name=".MainActivity"
             android:exported="true">
