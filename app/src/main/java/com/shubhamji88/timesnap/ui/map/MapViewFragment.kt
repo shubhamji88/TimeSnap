@@ -6,12 +6,16 @@ import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
 import com.example.worldwindtest.CameraController
 import com.shubhamji88.timesnap.R
+import com.shubhamji88.timesnap.Utils
 import com.shubhamji88.timesnap.atmosphere.AtmosphereLayer
+import com.shubhamji88.timesnap.data.Animal
 import com.shubhamji88.timesnap.databinding.MapViewFragmentBinding
+import com.shubhamji88.timesnap.ui.dialog.YearPicker
 import gov.nasa.worldwind.BasicWorldWindowController
 import gov.nasa.worldwind.WorldWind
 import gov.nasa.worldwind.WorldWindow
@@ -25,13 +29,14 @@ import gov.nasa.worldwind.layer.RenderableLayer
 import gov.nasa.worldwind.render.ImageSource
 import gov.nasa.worldwind.shape.Placemark
 
-class MapViewFragment : Fragment() {
+class MapViewFragment : Fragment() , YearPicker.OnClickListener {
     private lateinit var wwd: WorldWindow
     private var atmosphereLayer: AtmosphereLayer? = null
     private var sunLocation = Location(0.0, -100.0)
     private lateinit var application: Application
     private lateinit var viewModel: MapViewViewModel
     private lateinit var binding: MapViewFragmentBinding
+    val array=arrayOf("100 year ago","200 million year ago","1000 year ago","1000 million year ago")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -41,8 +46,18 @@ class MapViewFragment : Fragment() {
         val viewModelFactory = MapViewViewModelFactory(application)
         viewModel = ViewModelProvider(this, viewModelFactory)[MapViewViewModel::class.java]
         binding.globe.addView(createWorldWindow())
-        putPlaceMarks()
+        putPlaceMarks("INDOMINUS REX")
+        handleButton()
         return binding.root
+    }
+
+    private fun handleButton() {
+
+        val yearPicker=YearPicker.getInstance(array,this)
+        binding.travelButton.setOnClickListener {
+            val supportFragmentManager = activity?.supportFragmentManager!!
+            yearPicker.show(supportFragmentManager,"year")
+        }
     }
 
     private fun createWorldWindow(): WorldWindow {
@@ -59,44 +74,39 @@ class MapViewFragment : Fragment() {
 
         return wwd
     }
-    private fun putPlaceMarks(){
+    private fun putPlaceMarks(timeAgo:String){
         val layer = RenderableLayer("Placemarks")
         wwd.layers.addLayer(layer)
         wwd.worldWindowController= PickNavigateController(application)
-        layer.addRenderable(
-            createAirportPlacemark(
-                Position.fromDegrees(34.2000, -119.2070, 0.0),
-                "Sample Name"
-            )
-        )
+        viewModel.placemarks.observe(viewLifecycleOwner,{map->
+            Log.d("placemark",map.toString())
+            map?.let {
+                if(it.containsKey(timeAgo))
+                    layer.addAllRenderables(map[timeAgo])
+            }
+        })
+//        layer.addRenderable(
+//            createPlaceMark(
+//                Position.fromDegrees(34.2000, -119.2070, 0.0),
+//                "Sample Name",
+//                "v"
+//            )
+//        )
+
     }
     private fun createCamera(): Camera {
-        // Create a camera position above KOXR airport, Oxnard, CA
         val camera = Camera()
         camera.set(
             34.2, -119.2,
             10000.0, WorldWind.ABSOLUTE,
-            90.0,  // Looking east
-            70.0,  // Lookup up from nadir
+            90.0,
+            70.0,
             0.0
-        ) // No roll
+        )
         return camera
     }
-    override fun onResume() {
-        super.onResume()
-        wwd.onResume() // resumes a paused rendering thread
-    }
 
-    private fun createAirportPlacemark(position: Position?, airportName: String?): Placemark? {
-        val placeMark = Placemark.createWithImage(
-            position,
-            ImageSource.fromResource(R.drawable.aircraft_fighter)
-        )
 
-        placeMark.attributes.setImageOffset(Offset.bottomCenter()).imageScale = 3.0
-        placeMark.displayName = airportName
-        return placeMark
-    }
     class PickNavigateController(context: Context) :
         BasicWorldWindowController() {
         private var pickedObject // last picked object from onDown events
@@ -111,19 +121,11 @@ class MapViewFragment : Fragment() {
                 }
 
             })
-
-        /**
-         * Delegates events to the pick handler or the native WorldWind navigation handlers.
-         */
         override fun onTouchEvent(event: MotionEvent?): Boolean {
             super.onTouchEvent(event)
             pickGestureDetector.onTouchEvent(event)
             return true
         }
-
-        /**
-         * Performs a pick at the tap location.
-         */
         fun pick(event: MotionEvent) {
             pickedObject = null
             val pickList = worldWindow.pick(event.x, event.y)
@@ -138,9 +140,17 @@ class MapViewFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        wwd.onResume() // resumes a paused rendering thread
+    }
+
     override fun onPause() {
         super.onPause()
         wwd.onPause() // pauses the rendering thread
     }
 
+    override fun onYearPick(yearIndex: Int?) {
+        Toast.makeText(context, "${array[yearIndex!!]}", Toast.LENGTH_SHORT).show()
+    }
 }

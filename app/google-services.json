@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "14367214138",
+    "project_id": "timesnap-7fd7d",
+    "storage_bucket": "timesnap-7fd7d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:14367214138:android:bfa41ad0f89d14336d0303",
+        "android_client_info": {
+          "package_name": "com.shubhamji88.timesnap"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "14367214138-gf9nutsm0ruchreq0fit4mvim84c3u6k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDm4ZkmC7pi6Uoh2hX2xLDZipoV3hCk9v4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "14367214138-gf9nutsm0ruchreq0fit4mvim84c3u6k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

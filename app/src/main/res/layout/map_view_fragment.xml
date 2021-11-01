@@ -16,5 +16,25 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"></FrameLayout>
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/travel_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/black"
+            android:elevation="4dp"
+            android:fontFamily="@font/metal_mania"
+            android:shadowDy="40"
+            android:text="Travel Time!"
+            android:textColor="@color/white"
+            android:padding="12dp"
+            android:textSize="26sp"
+            app:rippleColor="#E1B378"
+            app:cornerRadius="18dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:strokeColor="#E1B378"
+            app:strokeWidth="1dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
