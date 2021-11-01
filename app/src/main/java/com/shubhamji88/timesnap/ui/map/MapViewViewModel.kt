@@ -30,7 +30,10 @@ class MapViewViewModel(application: Application) : AndroidViewModel(application)
             repo.cacheAllItems()
         }
     }
-
+    fun getKeysOfTimeTravel(): Array<String>? {
+        val array= arrayListOf<String>()
+        return _placemarks.value?.keys?.toTypedArray()
+    }
     fun getAllPlacemark(data: List<Item>){
         uiScope.launch(Dispatchers.IO){
             val placemarkList= mutableMapOf<String,MutableList<Placemark>>()
@@ -64,7 +67,7 @@ class MapViewViewModel(application: Application) : AndroidViewModel(application)
             position,
             ImageSource.fromBitmap(Utils.bindImage(getApplication(),url))
         )
-        placeMark.attributes.setImageOffset(Offset.bottomCenter()).imageScale = 3.0
+        placeMark.attributes.setImageOffset(Offset.bottomCenter()).imageScale = 1.0
         placeMark.displayName = name
         return placeMark
     }

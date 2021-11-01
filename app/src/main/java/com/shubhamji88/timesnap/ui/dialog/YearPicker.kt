@@ -59,18 +59,18 @@ class YearPicker : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.go.setOnClickListener {
-            mListener.onYearPick(binding.numberPicker.value)
-
+            mListener.onYearPick(timeList?.get(binding.numberPicker.value))
+            dismiss()
         }
     }
 
     interface OnClickListener {
-        fun onYearPick(yearIndex:Int?)
+        fun onYearPick(year:String?)
     }
 
     companion object {
         private const val KEY_DEFAULT_ARRAY = "default_array"
-        fun getInstance(timeArray: Array<String>, listener: OnClickListener): YearPicker {
+        fun getInstance(timeArray: Array<String>?, listener: OnClickListener): YearPicker {
             val dialog = YearPicker()
             val bundle = Bundle()
             bundle.putStringArray(KEY_DEFAULT_ARRAY,timeArray)

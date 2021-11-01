@@ -34,6 +34,8 @@ class MapViewFragment : Fragment() , YearPicker.OnClickListener,PickNavigateCont
     private lateinit var application: Application
     private lateinit var viewModel: MapViewViewModel
     private lateinit var binding: MapViewFragmentBinding
+    var layer: RenderableLayer?=null
+    private lateinit var yearPicker: YearPicker
     val array=arrayOf("100 year ago","200 million year ago","1000 year ago","1000 million year ago")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,7 +47,7 @@ class MapViewFragment : Fragment() , YearPicker.OnClickListener,PickNavigateCont
         viewModel = ViewModelProvider(this, viewModelFactory)[MapViewViewModel::class.java]
         binding.globe.addView(createWorldWindow())
         putPlaceMarks("70-100 MILLION YEARS BEFORE")
-        handleButton()
+
         handleData()
         return binding.root
     }
@@ -57,7 +59,7 @@ class MapViewFragment : Fragment() , YearPicker.OnClickListener,PickNavigateCont
     }
 
     private fun handleButton() {
-        val yearPicker=YearPicker.getInstance(array,this)
+        yearPicker=YearPicker.getInstance(viewModel.getKeysOfTimeTravel(),this)
         binding.travelButton.setOnClickListener {
             val supportFragmentManager = activity?.supportFragmentManager!!
             yearPicker.show(supportFragmentManager,"year")
@@ -79,15 +81,17 @@ class MapViewFragment : Fragment() , YearPicker.OnClickListener,PickNavigateCont
         return wwd
     }
     private fun putPlaceMarks(timeAgo:String){
-        val layer = RenderableLayer("Placemarks")
+        layer=null
+        layer= RenderableLayer("Placemarks")
         wwd.layers.addLayer(layer)
         wwd.worldWindowController= PickNavigateController(application,this)
         viewModel.placemarks.observe(viewLifecycleOwner,{map->
             Log.d("placemark",map.toString())
             map?.let {
                 if(it.containsKey(timeAgo))
-                    layer.addAllRenderables(map[timeAgo])
+                    layer!!.addAllRenderables(map[timeAgo])
             }
+            handleButton()
         })
 
     }
@@ -103,12 +107,6 @@ class MapViewFragment : Fragment() , YearPicker.OnClickListener,PickNavigateCont
         return camera
     }
 
-
-
-    fun openAboutDialog(name:String){
-
-    }
-
     override fun onResume() {
         super.onResume()
         wwd.onResume() // resumes a paused rendering thread
@@ -119,16 +117,18 @@ class MapViewFragment : Fragment() , YearPicker.OnClickListener,PickNavigateCont
         wwd.onPause() // pauses the rendering thread
     }
 
-    override fun onYearPick(yearIndex: Int?) {
-        Toast.makeText(context, "${array[yearIndex!!]}", Toast.LENGTH_SHORT).show()
+    override fun onYearPick(year: String?) {
+        year?.let {
+            wwd.layers.removeLayer(layer)
+            wwd.requestRedraw()
+            putPlaceMarks(it)
+        }
     }
 
     override fun openItemDetails(name: String) {
         val aboutActivityIntent = Intent(context, PopUpActivity::class.java)
             .putExtra("name", name)
         startActivity(aboutActivityIntent)
-//        val aboutDialog=AboutDialog.getInstance(this,viewModel.getItemByName(name))
-//        aboutDialog.show(activity?.supportFragmentManager!!,"About")
     }
 }
 class PickNavigateController(context: Context,listner:PickNavigateController.OnClickListener) :
