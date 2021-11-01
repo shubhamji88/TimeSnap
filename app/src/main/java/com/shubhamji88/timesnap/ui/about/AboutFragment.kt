@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
@@ -15,7 +17,6 @@ import com.shubhamji88.timesnap.Utils
 import com.shubhamji88.timesnap.atmosphere.AtmosphereLayer
 import com.shubhamji88.timesnap.data.model.Item
 import com.shubhamji88.timesnap.databinding.AboutDialogBinding
-import com.shubhamji88.timesnap.databinding.MapViewFragmentBinding
 import com.shubhamji88.timesnap.ui.dialog.AboutDialog
 import com.shubhamji88.timesnap.ui.dialog.YearPicker
 import gov.nasa.worldwind.BasicWorldWindowController
@@ -62,6 +63,15 @@ class AboutFragment : Fragment() {
         viewModel.currentItemBitmap.observe(viewLifecycleOwner,{
             binding.imageView.setImageBitmap(it)
         })
+        binding.sticker.setOnClickListener {
+            generateSticker()
+        }
+    }
+
+    private fun generateSticker() {
+        binding.topText.alpha= 1.0F
+        binding.imageView.setImageBitmap(viewModel.getBitmapFromView(binding.stickerLayout))
+        binding.topText.alpha=0.0F
     }
 
 }
