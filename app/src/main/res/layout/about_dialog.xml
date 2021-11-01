@@ -11,8 +11,7 @@
 
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="#2B2B2B">
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/imageView"
@@ -57,47 +56,52 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/sticker"
-        app:rippleColor="#E1B378"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="8dp"
         android:backgroundTint="@color/black"
         android:elevation="4dp"
         android:fontFamily="@font/metal_mania"
         android:shadowColor="#FFFF"
         android:shadowDy="40"
         android:text="SHARE STICKER"
+        android:textColor="@color/white"
+        android:textSize="18sp"
         app:cornerRadius="18dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/ar"
         app:layout_constraintEnd_toStartOf="@+id/ar"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/details"
-        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintTop_toTopOf="@+id/ar"
+        app:rippleColor="#E1B378"
         app:strokeColor="#E1B378"
         app:strokeWidth="1dp" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/ar"
         android:layout_width="0dp"
-        app:rippleColor="#E1B378"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
         android:backgroundTint="@color/black"
         android:elevation="4dp"
+
         android:fontFamily="@font/metal_mania"
         android:shadowColor="#FFFF"
         android:shadowDy="40"
         android:text="AUGMENTED REALITY"
+        android:textColor="@color/white"
+        android:textSize="18sp"
         app:cornerRadius="18dp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/sticker"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/sticker"
+        app:layout_constraintTop_toBottomOf="@+id/details"
+        app:rippleColor="#E1B378"
         app:strokeColor="#E1B378"
         app:strokeWidth="1dp" />
 

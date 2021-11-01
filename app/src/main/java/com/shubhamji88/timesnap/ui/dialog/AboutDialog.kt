@@ -1,23 +1,22 @@
 package com.shubhamji88.timesnap.ui.dialog
 
 import android.app.Dialog
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.MutableLiveData
 import com.shubhamji88.timesnap.R
 import com.shubhamji88.timesnap.Utils
-import com.shubhamji88.timesnap.data.Animal
+import com.shubhamji88.timesnap.data.getDatabase
+import com.shubhamji88.timesnap.data.model.Item
+//import com.shubhamji88.timesnap.data.Animal
 import com.shubhamji88.timesnap.databinding.AboutDialogBinding
-import com.shubhamji88.timesnap.databinding.TimePickDialogBinding
 import com.shubhamji88.timesnap.repo.AppRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 class AboutDialog : DialogFragment() {
     private lateinit var mListener: OnClickListener
@@ -25,7 +24,9 @@ class AboutDialog : DialogFragment() {
     private var itemName:String?=null
     val job=Job()
     private lateinit var dialogScope: CoroutineScope
-    val repo=AppRepository()
+    private val currentItemDetails=MutableLiveData<Item?>()
+    private val currentItemBitmap=MutableLiveData<Bitmap?>()
+    val repo=AppRepository(getDatabase(requireContext()).cacheDao)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val arguments = arguments
@@ -63,23 +64,32 @@ class AboutDialog : DialogFragment() {
     ): View {
         binding= DataBindingUtil.inflate(inflater,R.layout.about_dialog,container,false)
         dialogScope= CoroutineScope(Dispatchers.Main+job)
+        getItemDetails()
+        currentItemDetails.observe(viewLifecycleOwner,{
+            it?.let {
+                binding.name.text=it.name
+                binding.details.text=it.text
+                dialogScope.launch(Dispatchers.IO) {
+                    currentItemBitmap.postValue(it.picUrl?.let { it1 ->
+                        Utils.bindImage(requireContext(),
+                            it1
+                        )
+                    })
+                }
+            }
+        })
+        currentItemBitmap.observe(viewLifecycleOwner,{
+            binding.imageView.setImageBitmap(it)
+        })
 
-        val itemDetails=getItemDetails()
-//        binding.name.text=itemDetails.name
-//        binding.details.text=itemDetails.text
-//        binding.imageView.setImageBitmap(Utils.bindImage(requireContext(),itemDetails.picUrl))
-//        binding.numberPicker.minValue=0
-//        binding.numberPicker.maxValue=timeList?.size!!-1
-//        binding.numberPicker.displayedValues=timeList
         return binding.root
     }
-    private fun getItemDetails(): Animal? {
-        var details:Animal?=null
+    private fun getItemDetails(){
         dialogScope.launch(Dispatchers.IO) {
-           details= itemName?.let { repo.getItemDetails(it) }
+           itemName?.let {
+               currentItemDetails.postValue(repo.getItemDetails(it))
+           }
         }
-        Log.d("Item",details.toString()+" "+itemName)
-       return details
     }
 
     override fun onStop() {

@@ -42,9 +42,16 @@ class MapViewFragment : Fragment() , YearPicker.OnClickListener,AboutDialog.OnCl
         val viewModelFactory = MapViewViewModelFactory(application)
         viewModel = ViewModelProvider(this, viewModelFactory)[MapViewViewModel::class.java]
         binding.globe.addView(createWorldWindow())
-        putPlaceMarks("INDOMINUS REX")
+        putPlaceMarks("70-100 MILLION YEARS BEFORE")
         handleButton()
+        handleData()
         return binding.root
+    }
+
+    private fun handleData() {
+        viewModel.allItemData.observe(viewLifecycleOwner,{
+            viewModel.getAllPlacemark(it)
+        })
     }
 
     private fun handleButton() {
