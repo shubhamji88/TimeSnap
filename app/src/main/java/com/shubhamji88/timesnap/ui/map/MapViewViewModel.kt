@@ -69,4 +69,9 @@ class MapViewViewModel(application: Application) : AndroidViewModel(application)
         placeMark.displayName = name
         return placeMark
     }
+
+    override fun onCleared() {
+        super.onCleared()
+        viewModelJob.cancel()
+    }
 }

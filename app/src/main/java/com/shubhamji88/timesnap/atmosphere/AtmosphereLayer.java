@@ -43,7 +43,7 @@ public class AtmosphereLayer extends AbstractLayer {
     public AtmosphereLayer() {
         this.setDisplayName("Atmosphere");
         this.setPickEnabled(false);
-        this.nightImageSource = ImageSource.fromResource(R.drawable.dnb_land_ocean_ice_2012);
+        this.nightImageSource = ImageSource.fromResource(R.drawable.earth_night_no_light);
         this.nightImageOptions = new ImageOptions(WorldWind.RGB_565);
     }
 

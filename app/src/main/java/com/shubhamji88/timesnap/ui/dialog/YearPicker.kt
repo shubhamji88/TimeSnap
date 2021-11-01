@@ -60,6 +60,7 @@ class YearPicker : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.go.setOnClickListener {
             mListener.onYearPick(binding.numberPicker.value)
+
         }
     }
 

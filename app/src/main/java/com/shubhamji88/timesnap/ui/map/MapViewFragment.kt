@@ -11,25 +11,21 @@ import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
 import com.example.worldwindtest.CameraController
 import com.shubhamji88.timesnap.R
-import com.shubhamji88.timesnap.Utils
 import com.shubhamji88.timesnap.atmosphere.AtmosphereLayer
-import com.shubhamji88.timesnap.data.Animal
 import com.shubhamji88.timesnap.databinding.MapViewFragmentBinding
+import com.shubhamji88.timesnap.ui.dialog.AboutDialog
 import com.shubhamji88.timesnap.ui.dialog.YearPicker
 import gov.nasa.worldwind.BasicWorldWindowController
 import gov.nasa.worldwind.WorldWind
 import gov.nasa.worldwind.WorldWindow
 import gov.nasa.worldwind.geom.Camera
 import gov.nasa.worldwind.geom.Location
-import gov.nasa.worldwind.geom.Offset
-import gov.nasa.worldwind.geom.Position
 import gov.nasa.worldwind.layer.BackgroundLayer
 import gov.nasa.worldwind.layer.BlueMarbleLandsatLayer
 import gov.nasa.worldwind.layer.RenderableLayer
-import gov.nasa.worldwind.render.ImageSource
 import gov.nasa.worldwind.shape.Placemark
 
-class MapViewFragment : Fragment() , YearPicker.OnClickListener {
+class MapViewFragment : Fragment() , YearPicker.OnClickListener,AboutDialog.OnClickListener,PickNavigateController.OnClickListener{
     private lateinit var wwd: WorldWindow
     private var atmosphereLayer: AtmosphereLayer? = null
     private var sunLocation = Location(0.0, -100.0)
@@ -52,7 +48,6 @@ class MapViewFragment : Fragment() , YearPicker.OnClickListener {
     }
 
     private fun handleButton() {
-
         val yearPicker=YearPicker.getInstance(array,this)
         binding.travelButton.setOnClickListener {
             val supportFragmentManager = activity?.supportFragmentManager!!
@@ -77,7 +72,7 @@ class MapViewFragment : Fragment() , YearPicker.OnClickListener {
     private fun putPlaceMarks(timeAgo:String){
         val layer = RenderableLayer("Placemarks")
         wwd.layers.addLayer(layer)
-        wwd.worldWindowController= PickNavigateController(application)
+        wwd.worldWindowController= PickNavigateController(application,this)
         viewModel.placemarks.observe(viewLifecycleOwner,{map->
             Log.d("placemark",map.toString())
             map?.let {
@@ -85,13 +80,6 @@ class MapViewFragment : Fragment() , YearPicker.OnClickListener {
                     layer.addAllRenderables(map[timeAgo])
             }
         })
-//        layer.addRenderable(
-//            createPlaceMark(
-//                Position.fromDegrees(34.2000, -119.2070, 0.0),
-//                "Sample Name",
-//                "v"
-//            )
-//        )
 
     }
     private fun createCamera(): Camera {
@@ -107,37 +95,9 @@ class MapViewFragment : Fragment() , YearPicker.OnClickListener {
     }
 
 
-    class PickNavigateController(context: Context) :
-        BasicWorldWindowController() {
-        private var pickedObject // last picked object from onDown events
-                : Any? = null
-        private var pickGestureDetector = GestureDetector(
-            context.applicationContext, object : GestureDetector.SimpleOnGestureListener() {
-                override fun onDown(event: MotionEvent): Boolean {
-                    pick(event) // Pick the object(s) at the tap location
-                    Log.d("touch",event.x.toString()+" "+event.y.toString())
-//                Toast.makeText(context, "Touch at :${event.x},${event.y}", Toast.LENGTH_SHORT).show()
-                    return false // By not consuming this event, we allow it to pass on to the navigation gesture handlers
-                }
 
-            })
-        override fun onTouchEvent(event: MotionEvent?): Boolean {
-            super.onTouchEvent(event)
-            pickGestureDetector.onTouchEvent(event)
-            return true
-        }
-        fun pick(event: MotionEvent) {
-            pickedObject = null
-            val pickList = worldWindow.pick(event.x, event.y)
+    fun openAboutDialog(name:String){
 
-            val topPickedObject = pickList.topPickedObject()
-            if (topPickedObject != null) {
-                pickedObject = topPickedObject.userObject
-                val obj = topPickedObject.userObject as Placemark
-//                Log.i("touch",obj.displayName)
-//            Toast.makeText(, `object`.displayName, Toast.LENGTH_SHORT).show()
-            }
-        }
     }
 
     override fun onResume() {
@@ -152,5 +112,54 @@ class MapViewFragment : Fragment() , YearPicker.OnClickListener {
 
     override fun onYearPick(yearIndex: Int?) {
         Toast.makeText(context, "${array[yearIndex!!]}", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onShareSticker() {
+        TODO("Not yet implemented")
+    }
+
+    override fun onAR() {
+        TODO("Not yet implemented")
+    }
+
+    override fun openItemDetails(name: String) {
+        val aboutDialog=AboutDialog.getInstance(name,this)
+        aboutDialog.show(activity?.supportFragmentManager!!,"About")
+    }
+}
+class PickNavigateController(context: Context,listner:PickNavigateController.OnClickListener) :
+    BasicWorldWindowController() {
+    private val mListener: PickNavigateController.OnClickListener=listner
+    interface OnClickListener {
+        fun openItemDetails(name: String)
+    }
+    private var pickedObject // last picked object from onDown events
+            : Any? = null
+    private var pickGestureDetector = GestureDetector(
+        context.applicationContext, object : GestureDetector.SimpleOnGestureListener() {
+            override fun onDown(event: MotionEvent): Boolean {
+                pick(event)
+                return false // By not consuming this event, we allow it to pass on to the navigation gesture handlers
+            }
+
+        })
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        super.onTouchEvent(event)
+        pickGestureDetector.onTouchEvent(event)
+        return true
+    }
+    fun pick(event: MotionEvent) {
+        pickedObject = null
+        val pickList = worldWindow.pick(event.x, event.y)
+
+        val topPickedObject = pickList.topPickedObject()
+        if (topPickedObject != null) {
+            pickedObject = topPickedObject.userObject
+            if(pickedObject is Placemark) {
+                val obj = topPickedObject.userObject as Placemark
+                mListener.openItemDetails(obj.displayName)
+                Log.i("touch",obj.displayName)
+            }
+        }
     }
 }
