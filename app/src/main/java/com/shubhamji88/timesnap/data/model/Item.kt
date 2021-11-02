@@ -3,18 +3,6 @@ package com.shubhamji88.timesnap.data.model
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-//data class Animal(
-//    val name: String,
-//    val height: String,
-//    val length: String,
-//    val latitude:Double,
-//    val longitude:Double,
-//    val lifespan: String,
-//    val millYearAgo: Long,
-//    val picUrl:String,
-//    val lens_id:String
-//)
-//val list= listOf<Animal>(Animal(name="INDOMINUS REX","HEIGHT - 5.5 - 6.7 M\n LENGTH - 13.1 - 16.7 M\n LIFESPAN - 59 YEARS\n lived - 66–68 MILLION YEARS AGO(CRETACEOUS PERIOD)", latitude= 62.4114, longitude= 149.0730,"100 Million year ago", picUrl= "https://firebasestorage.googleapis.com/v0/b/timesnap-7fd7d.appspot.com/o/indominus-rex.png?alt=media&token=6bcec545-fe6d-4c03-82fd-774a76f0a804", lens_id= ""))
 @Entity(tableName = "Item")
 data class Item(
     @PrimaryKey
@@ -30,51 +18,92 @@ data class Item(
     constructor():this("null",null,null,null,null,null,null,null)
 }
 val list1= listOf<Item>(
-Item(" INDOMINUS REX"
-, "HEIGHT - 5.5 - 6.7 M\nLENGTH - 13.1 - 16.7 M\nLIFESPAN - 59 YEARS\nlived - 66–68 MILLION YEARS AGO(CRETACEOUS PERIOD)"
-, 62.4114
-, 149.0730
-, "66-68 Million year ago"
-, "https://firebasestorage.googleapis.com/v0/b/timesnap-7fd7d.appspot.com/o/indominus-rex.png?alt=media&token=6bcec545-fe6d-4c03-82fd-774a76f0a804",
-"",""),
+    Item(" Mesopotamian civilization"
+        , "Original Location: Northeast by the Zagros mountains, southeast by the Arabian plateau\n Current Location: Iraq, Syria, and Turkey\n Major Highlights: First civilization in the world\n Meaning: Land between rivers (ancient Greek)"
+        , 33.2232
+        , 43.6793
+        , "500 BC–3500 BC"
+        , "https://firebasestorage.googleapis.com/v0/b/timesnap-7fd7d.appspot.com/o/Mesopotamian-Civilization.jpg?alt=media&token=3c2ba482-4ac9-4546-90b5-94f0fb3ba7bb"
+        , "8ccebe8f396c4f90b0d7b1ca5317da6e",
+        "30-3500 BC")
 
+,
+Item(" Indus Valley civilization"
+, "Original Location: Northeast by the Zagros mountains, southeast by the Arabian plateau\n Current Location: Iraq, Syria, and Turkey\n Major Highlights: First civilization in the world\n Meaning: Land between rivers (ancient Greek)"
+, 28.7186
+, 77.0685
+, "1900 BC–3300 BC"
+, "https://firebasestorage.googleapis.com/v0/b/timesnap-7fd7d.appspot.com/o/Indus-Valley-Civilization.jpg?alt=media&token=f7120e81-8774-4868-b1a8-1baa14b2e663"
+, "8ccebe8f396c4f90b0d7b1ca5317da6e",
+"30-3500 BC"
+)
 
-
-Item(" TARBOSAURUS"
-, "HEIGHT - 4.3 - 7 M\nLENGTH - 10 - 12 M\nLIFESPAN - 25 YEARS"
-, 42.0790
-, 104.1901
-, "72-68 MILLION YEARS AGO"
-, "https://firebasestorage.googleapis.com/v0/b/timesnap-7fd7d.appspot.com/o/Tarbosaurus.png?alt=media&token=c02ca1b5-b45c-44c1-bd11-d0d67fbf51cf",
-"",""),
-
-
-
-Item(" Quetzalcoatlus "
-, "Wingspan: 10 – 11 M\nMass: 200 – 250 kg\nLength: 10 – 11 M\nGenus: Quetzalcoatlus, Lawson, 1975"
-, 54.5260
-, 105.2551
-, "66-72 Million year ago"
-, "https://firebasestorage.googleapis.com/v0/b/timesnap-7fd7d.appspot.com/o/Quetzalcoatlus.png?alt=media&token=57f8ff86-0058-40b6-bd13-93f94f231129",
-"",""),
-
-
-
-Item(" Ankylosaurus"
-, "Height: 1.7 M\nMass: 4,800 – 8,000 kg\nLength: 6 – 8\nScientific name: Ankylosaurus (Fused lizard)"
-, 53.9333
-, 116.5765
-, "66-83 Million years ago (Campanian - Maastrichtian)"
-, "https://firebasestorage.googleapis.com/v0/b/timesnap-7fd7d.appspot.com/o/Ankylosaurus.png?alt=media&token=f31df4ed-af15-416d-bfef-fd1a9045eb2d",
-"","")
+,
+Item(" Greek civilization"
+, "Original Location: Italy, Sicily, North Africa, and as far west as France\n Current Location: Greece\n Major Highlights: Concepts of democracy and the Senate, the Olympics"
+, 39.0742
+, 21.8243
+, "479 BC–2700 BC"
+, "https://firebasestorage.googleapis.com/v0/b/timesnap-7fd7d.appspot.com/o/The%20Ancient%20Greek%20Civilization.jpg?alt=media&token=e60ac3a0-7767-4e06-b138-9198d963c464"
+, "8ccebe8f396c4f90b0d7b1ca5317da6e",
+"30-3500 BC"
+)
 ,
 
+Item(" Persian civilization"
+, "Original Location: Egypt in the west to Turkey in the north, and through Mesopotamia to the Indus river in the east\n Current Location: Modern-day Iran\n Major Highlights: Royal road"
+, 32.4279
+, 53.6880
+, "331 BC–550 BC"
+, "https://firebasestorage.googleapis.com/v0/b/timesnap-7fd7d.appspot.com/o/The-Persian-civilization.jpg?alt=media&token=9dd93066-cf92-4774-9b4e-36934b64e762"
+, "8ccebe8f396c4f90b0d7b1ca5317da6e",
+"30-3500 BC"
+)
+
+,
+Item(" Roman civilization"
+, "Original Location: Village of the Latini\n Current Location: Rome\n Major Highlights: Most powerful ancient civilization"
+, 41.9028
+, 12.4964
+, "465 AD–550 BC"
+, "https://firebasestorage.googleapis.com/v0/b/timesnap-7fd7d.appspot.com/o/Roman-civilization.jpg?alt=media&token=3bcebe66-2b38-41f6-bd79-81bba687cedf"
+, "8ccebe8f396c4f90b0d7b1ca5317da6e",
+"30-3500 BC"
+)
+,
+
+Item(" Aztec civilization"
+, "Original Location: Southcentral region of pre-Columbian Mexico\n Current Location: Mexico\n Major Highlights: Nahuatl became the major language"
+, 23.6345
+, 102.5528
+, "1521 AD–1345 AD"
+, "https://firebasestorage.googleapis.com/v0/b/timesnap-7fd7d.appspot.com/o/The-Aztecs-Pyramid.jpg?alt=media&token=53d3fdf4-abd3-4c4d-9e17-1e022a18ce65"
+, "8ccebe8f396c4f90b0d7b1ca5317da6e",
+"465-1532 AD"
+)
+,
+
+Item(" Chinese civilization"
+, "Original Location: Yellow River and Yangtze region\n Current Location: Country of China\n Major Highlights: Invention of paper and silk"
+, 35.8617
+, 104.1954
+, "1046 BC–1600 BC"
+, "https://firebasestorage.googleapis.com/v0/b/timesnap-7fd7d.appspot.com/o/ancient-chinese-civilization.jpg?alt=media&token=ae7ed725-bceb-4ea2-af41-f2a8e829d79e"
+, "8ccebe8f396c4f90b0d7b1ca5317da6e",
+"30-3500 BC"
+),
 
 
-Item(" Ichthyornis"
-, "Wingspan: 43 cm\nLength: 24 cm\nScientific name: Ichthyornis (Fish bird‭)\nKingdom: Animalia"
-, 53.9333
-, 116.5765
-, "70-99 Million years ago (Cenomanian - Campanian)"
-, "https://firebasestorage.googleapis.com/v0/b/timesnap-7fd7d.appspot.com/o/Ichthyornis.png?alt=media&token=c587335a-1a58-48be-96ef-1b5d00c7107b",
-"","") )
+
+Item(" Maya civilization"
+, "Original Location: Around present-day Yucatan\n Current Location: Yucatan, Quintana Roo, Campeche, Tabasco, and Chiapas in Mexico and south through Guatemala, Belize, El Salvador, and Honduras\n Major Highlights: Complex understanding of astronomy"
+, 23.6345
+, 102.5528
+, "900 AD–2600 BC"
+, "https://firebasestorage.googleapis.com/v0/b/timesnap-7fd7d.appspot.com/o/Mayan-civilization-2600-BC.jpg?alt=media&token=41c530c2-bca2-4bad-ab3e-9b9b18dc9d65"
+, "8ccebe8f396c4f90b0d7b1ca5317da6e",
+"465-1532 AD"
+)
+
+)
+

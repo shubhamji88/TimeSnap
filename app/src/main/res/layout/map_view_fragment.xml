@@ -45,6 +45,7 @@
             android:textColor="@color/white"
             android:padding="12dp"
             android:textSize="26sp"
+            android:visibility="gone"
             app:rippleColor="#E1B378"
             app:cornerRadius="18dp"
             app:layout_constraintBottom_toBottomOf="parent"

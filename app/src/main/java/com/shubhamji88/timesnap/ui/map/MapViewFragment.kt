@@ -58,7 +58,9 @@ class MapViewFragment : Fragment() , YearPicker.OnClickListener,PickNavigateCont
     }
 
     private fun handleButton() {
+        binding.travelButton.visibility=View.VISIBLE
         yearPicker=YearPicker.getInstance(viewModel.getKeysOfTimeTravel(),this)
+
         binding.travelButton.setOnClickListener {
             val supportFragmentManager = activity?.supportFragmentManager!!
             yearPicker.show(supportFragmentManager,"year")
@@ -98,7 +100,7 @@ class MapViewFragment : Fragment() , YearPicker.OnClickListener,PickNavigateCont
         val camera = Camera()
         camera.set(
             34.2, -119.2,
-            10000.0, WorldWind.ABSOLUTE,
+            100000.0, WorldWind.ABSOLUTE,
             90.0,
             100.0,
             0.0

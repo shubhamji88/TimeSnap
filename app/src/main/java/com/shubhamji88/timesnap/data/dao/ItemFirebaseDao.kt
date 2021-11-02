@@ -11,8 +11,5 @@ class ItemFirebaseDao {
     fun getAllItems(): Task<QuerySnapshot> {
         return itemCollection.get()
     }
-    fun getItemsByName(name:String): Task<DocumentSnapshot> {
-        return itemCollection.document(name).get()
-    }
 
 }
