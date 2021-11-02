@@ -10,6 +10,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TimeSnap">
+        <meta-data android:name="com.snapchat.kit.sdk.clientId" android:value="41ea0d56-cb8a-4c9a-9e77-c62c29f53df6" />
         <activity android:name="com.shubhamji88.timesnap.ui.about.PopUpActivity"
             android:theme="@style/CustomTheme"/>
         <activity
@@ -21,6 +22,25 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-    </application>
+        <provider
 
+            android:authorities="${applicationId}.fileprovider"
+
+            android:name="androidx.core.content.FileProvider"
+
+            android:exported="false"
+
+            android:grantUriPermissions="true">
+
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"
+                />
+        </provider>
+    </application>
+    <queries>
+
+        <package android:name="com.snapchat.android" />
+
+    </queries>
 </manifest>

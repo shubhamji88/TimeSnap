@@ -1,9 +1,15 @@
 package com.shubhamji88.timesnap.ui.about
 
 import android.app.Application
+import android.content.ContentValues
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
+import android.net.Uri
+import android.os.Environment
+import android.os.SystemClock
+import android.provider.MediaStore
 import android.view.View
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -18,6 +24,9 @@ import gov.nasa.worldwind.geom.Position
 import gov.nasa.worldwind.render.ImageSource
 import gov.nasa.worldwind.shape.Placemark
 import kotlinx.coroutines.*
+import java.io.File
+import java.io.FileOutputStream
+import java.io.OutputStream
 
 class AboutViewModel(application: Application) : AndroidViewModel(application)  {
     private var viewModelJob = Job()
@@ -51,6 +60,17 @@ class AboutViewModel(application: Application) : AndroidViewModel(application)  
         }
         view.draw(canvas)
         return returnedBitmap
+    }
+
+    fun saveImageToStream(bitmap: Bitmap, outputStream: OutputStream?) {
+        if (outputStream != null) {
+            try {
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+                outputStream.close()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
     override fun onCleared() {
         super.onCleared()

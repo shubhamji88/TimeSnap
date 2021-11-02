@@ -1,36 +1,21 @@
 package com.shubhamji88.timesnap.ui.about
 
 import android.app.Application
-import android.content.Context
+import android.graphics.Bitmap
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.util.Log
 import android.view.*
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
-import com.example.worldwindtest.CameraController
 import com.shubhamji88.timesnap.R
-import com.shubhamji88.timesnap.Utils
-import com.shubhamji88.timesnap.atmosphere.AtmosphereLayer
-import com.shubhamji88.timesnap.data.model.Item
 import com.shubhamji88.timesnap.databinding.AboutDialogBinding
-import com.shubhamji88.timesnap.ui.dialog.AboutDialog
-import com.shubhamji88.timesnap.ui.dialog.YearPicker
-import gov.nasa.worldwind.BasicWorldWindowController
-import gov.nasa.worldwind.WorldWind
-import gov.nasa.worldwind.WorldWindow
-import gov.nasa.worldwind.geom.Camera
-import gov.nasa.worldwind.geom.Location
-import gov.nasa.worldwind.layer.BackgroundLayer
-import gov.nasa.worldwind.layer.BlueMarbleLandsatLayer
-import gov.nasa.worldwind.layer.RenderableLayer
-import gov.nasa.worldwind.shape.Placemark
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import com.snapchat.kit.sdk.SnapCreative
+import com.snapchat.kit.sdk.creative.api.SnapCreativeKitApi
+import com.snapchat.kit.sdk.creative.media.SnapMediaFactory
+import com.snapchat.kit.sdk.creative.media.SnapSticker
+import com.snapchat.kit.sdk.creative.models.SnapLiveCameraContent
+import java.io.File
+import java.io.FileOutputStream
 
 class AboutFragment : Fragment() {
 
@@ -64,14 +49,39 @@ class AboutFragment : Fragment() {
             binding.imageView.setImageBitmap(it)
         })
         binding.sticker.setOnClickListener {
-            generateSticker()
+            shareToSnapChat(generateSticker())
         }
     }
 
-    private fun generateSticker() {
-        binding.topText.alpha= 1.0F
-        binding.imageView.setImageBitmap(viewModel.getBitmapFromView(binding.stickerLayout))
-        binding.topText.alpha=0.0F
+    private fun shareToSnapChat(sticker: Bitmap) {
+        val snapCreativeKitApi: SnapCreativeKitApi = SnapCreative.getApi(requireContext())
+        val snapMediaFactory: SnapMediaFactory = SnapCreative.getMediaFactory(requireContext())
+        val snapContent=SnapLiveCameraContent()
+        val stickerFile = File(context?.cacheDir, "${viewModel.currentItem.value?.name}")
+        if(!stickerFile.exists())
+        viewModel.saveImageToStream(sticker, FileOutputStream(stickerFile))
+
+        snapContent.snapSticker=addSticker(snapMediaFactory,stickerFile)
+        snapContent.captionText="Today i went "+viewModel.currentItem.value?.title+ " to see "+viewModel.currentItem.value?.name
+        snapCreativeKitApi.send(snapContent)
     }
+    fun addSticker( snapMediaFactory: SnapMediaFactory,stickerFile:File): SnapSticker {
+        val snapSticker = snapMediaFactory.getSnapStickerFromFile(stickerFile)
+        snapSticker.setHeightDp(200F)
+        snapSticker.setWidthDp(200F)
+        snapSticker.setPosX(0.3f)
+        snapSticker.setPosY(0.8f)
+        snapSticker.setRotationDegreesClockwise(340.0f)
+        return snapSticker
+    }
+
+
+    private fun generateSticker(): Bitmap {
+        binding.topText.alpha= 1.0F
+        val bitmap=viewModel.getBitmapFromView(binding.stickerLayout)
+        binding.topText.alpha=0.0F
+        return bitmap
+    }
+
 
 }

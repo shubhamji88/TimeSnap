@@ -6,6 +6,11 @@ dependencyResolutionManagement {
         maven {
             url 'https://oss.jfrog.org/artifactory/oss-snapshot-local'
         }
+        maven {
+
+            url "https://raw.githubusercontent.com/Snap-Kit/release-maven/repo"
+
+        }
         jcenter() // Warning: this repository is going to shut down soon
     }
 }

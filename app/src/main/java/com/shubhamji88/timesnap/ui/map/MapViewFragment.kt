@@ -36,7 +36,6 @@ class MapViewFragment : Fragment() , YearPicker.OnClickListener,PickNavigateCont
     private lateinit var binding: MapViewFragmentBinding
     var layer: RenderableLayer?=null
     private lateinit var yearPicker: YearPicker
-    val array=arrayOf("100 year ago","200 million year ago","1000 year ago","1000 million year ago")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -47,7 +46,7 @@ class MapViewFragment : Fragment() , YearPicker.OnClickListener,PickNavigateCont
         viewModel = ViewModelProvider(this, viewModelFactory)[MapViewViewModel::class.java]
         binding.globe.addView(createWorldWindow())
         putPlaceMarks("70-100 MILLION YEARS BEFORE")
-
+        binding.mapTop.text="70-100 MILLION YEARS BEFORE"
         handleData()
         return binding.root
     }
@@ -101,7 +100,7 @@ class MapViewFragment : Fragment() , YearPicker.OnClickListener,PickNavigateCont
             34.2, -119.2,
             10000.0, WorldWind.ABSOLUTE,
             90.0,
-            70.0,
+            100.0,
             0.0
         )
         return camera
@@ -109,12 +108,12 @@ class MapViewFragment : Fragment() , YearPicker.OnClickListener,PickNavigateCont
 
     override fun onResume() {
         super.onResume()
-        wwd.onResume() // resumes a paused rendering thread
+        wwd.onResume()
     }
 
     override fun onPause() {
         super.onPause()
-        wwd.onPause() // pauses the rendering thread
+        wwd.onPause()
     }
 
     override fun onYearPick(year: String?) {
@@ -122,6 +121,7 @@ class MapViewFragment : Fragment() , YearPicker.OnClickListener,PickNavigateCont
             wwd.layers.removeLayer(layer)
             wwd.requestRedraw()
             putPlaceMarks(it)
+            binding.mapTop.text=year
         }
     }
 
